@@ -1,0 +1,103 @@
+import turtle as myturtle
+import numpy as np
+from PIL import Image
+
+class Rectangle:
+
+    def __init__(self, height, width, x, y):
+        self.height = height
+        self.width = width
+        self.x = x
+        self.y = y
+
+    def Color(self,r,b,g):
+        self.r = r
+        self.g = g
+        self.b = b
+
+    def draw(self, canvas):
+        canvas.data[self.x: self.x + self.height, self.y: self.y + self.width] = (self.r, self.g, self.b)
+
+class Square:
+
+    def __init__(self, side, x, y):
+        self.side = side
+        self.x = x
+        self.y = y
+        self.r = 0  ue
+        self.g = 0
+        self.b = 0
+
+
+    def Color(self, r, b, g):
+        self.r = r
+        self.g = g
+        self.b = b
+
+    def draw(self, canvas):
+        canvas.data[self.x: self.x + self.side, self.y: self.y + self.side] = (self.r, self.g, self.b)
+
+
+
+class Canvas:
+    def __init__(self, width, height, color):
+        self.width = width
+        self.height = height
+        self.color = color
+        self.data = np.zeros((self.height, self.width, 3), dtype=np.uint8)
+        self.data[:] = self.color
+
+    def make(self, imagepath):
+        img = Image.fromarray(self.data, 'RGB')
+        img.save(imagepath)
+
+
+#User canvas inputs
+canvas_width = int(input("Hello,what is the canvas width: "))
+canvas_height = int(input("What is the canvas height: "))
+colorinput = input("What color should the canvas be? Black or White: ")
+
+if colorinput.lower() == "black":
+    canvas_color = (0, 0, 0)
+else:
+    canvas_color = (255, 255, 255)
+
+canvas = Canvas(canvas_width, canvas_height, canvas_color)
+
+# Get the shape inputs
+# If else to pick what shape we are making, elif to make sure user input is correct, while loop to keep making shapes
+while True:
+    Shape1 = input("Hello, what shape would you like to create? (Type 'exit' to stop): ")
+
+    if Shape1.lower() == 'exit':
+        break
+# Exit the loop if the user types 'exit'
+
+    if Shape1.lower() == 'rectangle':
+        rectangle = Rectangle(int(input("What is the height: ")),
+                              int(input("What is the width: ")),
+                              int(input("What is the x coordinate: ")),
+                              int(input("What is the y coordinate: ")))
+
+        rectangle.Color(int(input("How much red do you want 1-255: ")),
+                                   int(input("How much green do you want 1-255: ")),
+                                   int(input("How much blue do you want 1-255: ")))
+
+        rectangle.draw(canvas)
+    elif Shape1.lower() == 'square':
+        square = Square(
+            int(input("How long should each side be of the square?: ")),
+            int(input("What is the x coordinate: ")),
+            int(input("What is the y coordinate: ")))
+
+        square.Color(int(input("How much red do you want 1-255: ")),
+                        int(input("How much green do you want 1-255: ")),
+                        int(input("How much blue do you want 1-255: ")))
+
+        square.draw(canvas)
+
+    else:
+        print("Invalid shape. Please enter 'rectangle' or 'square'.")
+
+#Create png file
+canvas.make("canvas.png")
